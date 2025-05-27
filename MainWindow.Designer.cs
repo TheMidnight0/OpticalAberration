@@ -37,25 +37,25 @@
             // 
             field.BackColor = Color.Black;
             field.BorderStyle = BorderStyle.Fixed3D;
-            field.Location = new Point(26, 12);
+            field.Location = new Point(12, 12);
             field.Name = "field";
-            field.Size = new Size(667, 535);
+            field.Size = new Size(788, 515);
             field.TabIndex = 0;
             // 
             // exit
             // 
             exit.BackColor = Color.Black;
             exit.BorderStyle = BorderStyle.Fixed3D;
-            exit.Location = new Point(721, 12);
+            exit.Location = new Point(806, 12);
             exit.Name = "exit";
-            exit.Size = new Size(535, 535);
+            exit.Size = new Size(368, 515);
             exit.TabIndex = 1;
             // 
             // openSettings
             // 
             openSettings.FlatStyle = FlatStyle.Flat;
             openSettings.Font = new Font("Comic Sans MS", 16F);
-            openSettings.Location = new Point(478, 558);
+            openSettings.Location = new Point(437, 539);
             openSettings.Name = "openSettings";
             openSettings.Size = new Size(326, 54);
             openSettings.TabIndex = 2;
@@ -67,11 +67,12 @@
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1288, 624);
+            ClientSize = new Size(1182, 603);
             Controls.Add(openSettings);
             Controls.Add(exit);
             Controls.Add(field);
             Font = new Font("Comic Sans MS", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            MinimumSize = new Size(400, 200);
             Name = "MainWindow";
             Text = "Оптическая аберрация";
             ResumeLayout(false);
