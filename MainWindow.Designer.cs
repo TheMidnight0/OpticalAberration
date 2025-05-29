@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             field = new Panel();
-            exit = new Panel();
+            image = new Panel();
             openSettings = new Button();
             SuspendLayout();
             // 
@@ -42,14 +43,14 @@
             field.Size = new Size(788, 515);
             field.TabIndex = 0;
             // 
-            // exit
+            // image
             // 
-            exit.BackColor = Color.Black;
-            exit.BorderStyle = BorderStyle.Fixed3D;
-            exit.Location = new Point(806, 12);
-            exit.Name = "exit";
-            exit.Size = new Size(368, 515);
-            exit.TabIndex = 1;
+            image.BackColor = Color.Black;
+            image.BorderStyle = BorderStyle.Fixed3D;
+            image.Location = new Point(806, 12);
+            image.Name = "image";
+            image.Size = new Size(368, 515);
+            image.TabIndex = 1;
             // 
             // openSettings
             // 
@@ -69,10 +70,12 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1182, 603);
             Controls.Add(openSettings);
-            Controls.Add(exit);
+            Controls.Add(image);
             Controls.Add(field);
+            DoubleBuffered = true;
             Font = new Font("Comic Sans MS", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            MinimumSize = new Size(400, 200);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimumSize = new Size(700, 200);
             Name = "MainWindow";
             Text = "Оптическая аберрация";
             ResumeLayout(false);
@@ -81,7 +84,7 @@
         #endregion
 
         public Panel field;
-        private Panel exit;
-        private Button openSettings;
+        public Panel image;
+        public Button openSettings;
     }
 }

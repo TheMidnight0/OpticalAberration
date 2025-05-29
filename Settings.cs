@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Linq;
+using System.Reflection;
+using System.Resources;
 
 namespace OpticalAberration
 {
     public partial class Settings : Form
     {
         readonly MainWindow main;
+        readonly List<Label> categories = [];
         bool lockRefresh = true;
-        List<Label> categories = [];
 
         public Settings(MainWindow window)
         {
@@ -25,24 +19,84 @@ namespace OpticalAberration
             main = window;
             main.Resize += Main_Resize; ;
             Paint += Settings_Paint;
+            FormClosed += Settings_FormClosed;
 
-            SyncChanges();
-            RayCountBox.Text = main.RayCount.ToString();
-            LensRadiusLeftBox.Text = main.LensRadiusLeft.ToString();
-            LensRadiusRightBox.Text = main.LensRadiusRight.ToString();
-            ExitDistanceBox.Text = main.ExitDistance.ToString();
-            ImageBlurStrengthBox.Text = main.ImageBlurStrength.ToString();
-            AngleBox.Text = main.Angle.ToString();
-            RayStrengthBox.Text = main.RayStrength.ToString();
-            LensHeightBox.Text = main.LensHeight.ToString();
-            RainbowPatternBox.Checked = main.RainbowPattern;
+            LensRadiusLeftNegativeBox.Checked = main.LensRadiusLeft < 0;
+            LensRadiusRightNegativeBox.Checked = main.LensRadiusRight < 0;
+            _ = new InputPair(main, "LensRadiusLeft", LensRadiusLeftBar, LensRadiusLeftBox, val =>
+            {
+                return (main.LensHeight / 2 + 1 + val) * (LensRadiusLeftNegativeBox.Checked ? -1 : 1);
+            }, var =>
+            {
+                LensRadiusLeftNegativeBox.Checked = var < 0;
+                return (int)(Math.Abs(var) - (main.LensHeight / 2 + 1));
+            }, 0, 1000);
+            _ = new InputPair(main, "LensRadiusRight", LensRadiusRightBar, LensRadiusRightBox, val =>
+            {
+                return (main.LensHeight / 2 + 1 + val) * (LensRadiusRightNegativeBox.Checked ? -1 : 1);
+            }, var =>
+            {
+                LensRadiusRightNegativeBox.Checked = var < 0;
+                return (int)(Math.Abs(var) - (main.LensHeight / 2 + 1));
+            }, 0, 1000);
+            _ = new InputPair(main, "LensThickness", LensThicknessBar, LensThicknessBox, val => val, var => (int)var, 1, 300);
+            _ = new InputPair(main, "LensHeight", LensHeightBar, LensHeightBox, val => val, var => (int)var, 50, 515);
+            _ = new InputPair(main, "Angle", AngleBar, AngleBox, val => val, var => (int)var, -80, 80);
+            _ = new InputPair(main, "LensRefractIndex", LensRefractIndexBar, LensRefractIndexBox, val => val / 100f, var => (int)(var * 100), 100, 500);
+            _ = new InputPair(main, "RayCount", RayCountBar, RayCountBox, val => val, var => (int)var, 0, 1000);
+            _ = new InputPair(main, "RayStrength", RayStrengthBar, RayStrengthBox, val => val, var => (int)var, 0, 255);
+            _ = new InputPair(main, "RayStepLength", RayStepLengthBar, RayStepLengthBox, val => val / 10f, var => (int)(var * 10), 1, 100);
+            _ = new InputPair(main, "ImageBlurStrength", ImageBlurStrengthBar, ImageBlurStrengthBox, val => val, var => (int)var, 1, 15);
+            _ = new InputPair(main, "ImageDistance", ImageDistanceBar, ImageDistanceBox, val => val, var => (int)var, 0, main.field.Width);
             DrawAfterExitBox.Checked = main.DrawAfterExit;
+            AllowTotalReflectBox.Checked = main.AllowTotalReflect;
+            RayColorsPalette.TileSize = new Size(48, RayColorsPalette.Height - (SystemInformation.HorizontalScrollBarHeight + 4));
+            SyncChanges();
             lockRefresh = false;
+        }
+
+        private void RayColorsPalette_DrawItem(object sender, DrawListViewItemEventArgs e)
+        {
+            Color textColor = Color.Black;
+            e.Graphics.FillRectangle(new SolidBrush(e.Item.BackColor), e.Bounds);
+            if (main.RayColors.Contains(e.Item.BackColor))
+            {
+                e.Graphics.DrawRectangle(new(Color.Blue, 2), e.Bounds);
+                TextRenderer.DrawText(e.Graphics, "✓", RayColorsPalette.Font, e.Bounds,
+                        Color.Black, Color.Empty,
+                        TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+            }
+            else
+            {
+                e.Graphics.DrawRectangle(new(Color.DarkGray, 2), e.Bounds);
+            }
+        }
+
+        private async void RayColorsPalette_Click(object sender, EventArgs e)
+        {
+            if (RayColorsPalette.SelectedItems.Count > 0)
+            {
+                if (main.RayColors.Contains(RayColorsPalette.SelectedItems[0].BackColor))
+                {
+                    main.RayColors.Remove(RayColorsPalette.SelectedItems[0].BackColor);
+                }
+                else
+                {
+                    main.RayColors.Add(RayColorsPalette.SelectedItems[0].BackColor);
+                }
+                RayColorsPalette.Invalidate();
+                await Task.Run(main.field.Invalidate);
+            }
+        }
+
+        private void Settings_FormClosed(object? sender, FormClosedEventArgs e)
+        {
+            main.openSettings.Text = "Открыть настройки";
         }
 
         private void Main_Resize(object? sender, EventArgs e)
         {
-            SyncChanges();
+            if (sender != null && ((Control)sender).Height != 34) SyncChanges();
         }
 
         private void Settings_Paint(object? sender, PaintEventArgs e)
@@ -60,145 +114,12 @@ namespace OpticalAberration
 
         private void SyncChanges()
         {
-            ExitDistanceBar.Maximum = main.field.Width * 2 / 3 - 60 - 5;
-            ExitDistanceBar.Value = main.ExitDistance > ExitDistanceBar.Maximum ? ExitDistanceBar.Maximum : main.ExitDistance;
-            ExitDistanceBox.Text = ExitDistanceBar.Value.ToString();
+            ImageDistanceBar.Maximum = main.field.Width - 7;
+            ImageDistanceBar.Minimum = (main.LensRadiusRight > 0) ? (main.LensRadiusRightCenter.X + main.LensRadiusRight) : (main.LensX + main.LensThickness / 2);
+            ImageDistanceBox.Text = ImageDistanceBar.Value.ToString();
 
             LensHeightBar.Maximum = main.field.Height;
-            LensHeightBar.Value = main.LensHeight > LensHeightBar.Maximum ? LensHeightBar.Maximum : main.LensHeight;
             LensHeightBox.Text = LensHeightBar.Value.ToString();
-        }
-
-        private async void RayCountBar_Scroll(object sender, EventArgs e)
-        {
-            RayCountBox.Text = RayCountBar.Value.ToString();
-            main.RayCount = RayCountBar.Value;
-            if (!lockRefresh) await Task.Run(main.field.Invalidate);
-        }
-
-        private async void RayCountBox_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                RayCountBar.Value = int.Parse(RayCountBox.Text);
-                main.RayCount = RayCountBar.Value;
-                if (!lockRefresh) await Task.Run(main.field.Invalidate);
-            }
-            catch { }
-        }
-
-        private async void RainbowPatternBox_CheckedChanged(object sender, EventArgs e)
-        {
-            main.RainbowPattern = RainbowPatternBox.Checked;
-            if (!lockRefresh) await Task.Run(main.field.Invalidate);
-        }
-
-        private async void LensRadiusLeftBar_Scroll(object sender, EventArgs e)
-        {
-            main.LensRadiusLeft = LensRadiusLeftBar.Value;
-            LensRadiusLeftBox.Text = LensRadiusLeftBar.Value.ToString();
-            if (!lockRefresh) await Task.Run(main.field.Invalidate);
-        }
-
-        private async void LensRadiusLeftbox_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                LensRadiusLeftBar.Value = int.Parse(LensRadiusLeftBox.Text);
-                main.LensRadiusLeft = LensRadiusLeftBar.Value;
-                if (!lockRefresh) await Task.Run(main.field.Invalidate);
-            }
-            catch { }
-        }
-
-        private async void LensRadiusRightBar_Scroll(object sender, EventArgs e)
-        {
-            main.LensRadiusRight = LensRadiusRightBar.Value;
-            LensRadiusRightBox.Text = LensRadiusRightBar.Value.ToString();
-            if (!lockRefresh) await Task.Run(main.field.Invalidate);
-        }
-
-        private async void LensRadiusRightBox_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                LensRadiusRightBar.Value = int.Parse(LensRadiusRightBox.Text);
-                main.LensRadiusRight = LensRadiusRightBar.Value;
-                if (!lockRefresh) await Task.Run(main.field.Invalidate);
-            }
-            catch { }
-        }
-
-        private async void ExitDistanceBar_Scroll(object sender, EventArgs e)
-        {
-            main.ExitDistance = ExitDistanceBar.Value;
-            ExitDistanceBox.Text = ExitDistanceBar.Value.ToString();
-            if (!lockRefresh) await Task.Run(main.field.Invalidate);
-        }
-
-        private async void ExitDistanceBox_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                ExitDistanceBar.Value = int.Parse(ExitDistanceBox.Text);
-                main.ExitDistance = ExitDistanceBar.Value;
-                if (!lockRefresh) await Task.Run(main.field.Invalidate);
-            }
-            catch { }
-        }
-
-        private async void AngleBar_Scroll(object sender, EventArgs e)
-        {
-            main.Angle = AngleBar.Value;
-            AngleBox.Text = AngleBar.Value.ToString();
-            if (!lockRefresh) await Task.Run(main.field.Invalidate);
-        }
-
-        private async void AngleBox_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                AngleBar.Value = int.Parse(AngleBox.Text);
-                main.Angle = AngleBar.Value;
-                if (!lockRefresh) await Task.Run(main.field.Invalidate);
-            }
-            catch { }
-        }
-
-        private async void ImageBlurStrengthBar_Scroll(object sender, EventArgs e)
-        {
-            main.ImageBlurStrength = ImageBlurStrengthBar.Value;
-            ImageBlurStrengthBox.Text = ImageBlurStrengthBar.Value.ToString();
-            if (!lockRefresh) await Task.Run(main.field.Invalidate);
-        }
-
-        private async void ImageBlurStrengthBox_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                ImageBlurStrengthBar.Value = int.Parse(ImageBlurStrengthBox.Text);
-                main.ImageBlurStrength = ImageBlurStrengthBar.Value;
-                if (!lockRefresh) await Task.Run(main.field.Invalidate);
-            }
-            catch { }
-        }
-
-        private async void RayStrengthBar_Scroll(object sender, EventArgs e)
-        {
-            main.RayStrength = RayStrengthBar.Value;
-            RayStrengthBox.Text = RayStrengthBar.Value.ToString();
-            if (!lockRefresh) await Task.Run(main.field.Invalidate);
-        }
-
-        private async void RayStrengthBox_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                RayStrengthBar.Value = int.Parse(RayStrengthBox.Text);
-                main.RayStrength = RayStrengthBar.Value;
-                if (!lockRefresh) await Task.Run(main.field.Invalidate);
-            }
-            catch { }
         }
 
         private async void DrawAfterExitBox_CheckedChanged(object sender, EventArgs e)
@@ -207,22 +128,118 @@ namespace OpticalAberration
             if (!lockRefresh) await Task.Run(main.field.Invalidate);
         }
 
-        private async void LensHeightBar_Scroll(object sender, EventArgs e)
+        private void LensRadiusLeftNegativeBox_CheckedChanged(object sender, EventArgs e)
         {
-            main.LensHeight = LensHeightBar.Value;
-            LensHeightBox.Text = LensHeightBar.Value.ToString();
+            LensRadiusLeftBox.Text = (Math.Abs(main.LensRadiusLeft) * (LensRadiusLeftNegativeBox.Checked ? -1 : 1)).ToString();
+        }
+
+        private void LensRadiusRightNegativeBox_CheckedChanged(object sender, EventArgs e)
+        {
+            LensRadiusRightBox.Text = (Math.Abs(main.LensRadiusRight) * (LensRadiusRightNegativeBox.Checked ? -1 : 1)).ToString();
+        }
+
+        private async void AllowTotalReflectBox_CheckedChanged(object sender, EventArgs e)
+        {
+            main.AllowTotalReflect = AllowTotalReflectBox.Checked;
             if (!lockRefresh) await Task.Run(main.field.Invalidate);
         }
 
-        private async void LensHeightBox_TextChanged(object sender, EventArgs e)
+        class InputPair
         {
-            try
+            public object? Property
             {
-                LensHeightBar.Value = int.Parse(LensHeightBox.Text);
-                main.LensHeight = LensHeightBar.Value;
-                if (!lockRefresh) await Task.Run(main.field.Invalidate);
+                get
+                {
+                    Type var = window.GetType();
+                    PropertyInfo? propinfo = var.GetProperty(propertyName);
+                    return propinfo?.GetValue(window);
+                }
+                set
+                {
+                    Type var = window.GetType();
+                    PropertyInfo? propinfo = var.GetProperty(propertyName);
+                    propinfo?.SetValue(window, value);
+                }
             }
-            catch { }
+            public TrackBar TrackBar { get; set; }
+            public TextBox TextBox { get; set; }
+
+            public int Minimum
+            {
+                get => TrackBar.Minimum;
+                set
+                {
+                    TrackBar.Minimum = value; if (!loopBreak) Sync();
+                }
+            }
+            public int Maximum
+            {
+                get => TrackBar.Maximum;
+                set
+                {
+                    TrackBar.Maximum = value; if (!loopBreak) Sync();
+                }
+            }
+
+            readonly Func<int, dynamic> Fvar;
+            readonly Func<dynamic, int> Fval;
+            readonly MainWindow window;
+            readonly string propertyName;
+            bool loopBreak = true;
+
+            public InputPair(MainWindow main, string property, TrackBar trackBar, TextBox textBox, Func<int, dynamic> fvar, Func<dynamic, int> fval, int minimum, int maximum)
+            {
+                propertyName = property;
+                window = main;
+                TrackBar = trackBar;
+                TextBox = textBox;
+                Fvar = fvar;
+                Fval = fval;
+                Minimum = minimum;
+                Maximum = maximum;
+                TrackBar.Scroll += TrackBar_Scroll;
+                TextBox.TextChanged += TextBox_TextChanged;
+                Sync();
+                loopBreak = false;
+            }
+
+            public void Sync()
+            {
+                if (Property != null)
+                {
+                    TrackBar.Value = Math.Max(Math.Min(Fval(Property), TrackBar.Maximum), TrackBar.Minimum);
+                    Property = Fvar(TrackBar.Value);
+                    TextBox.Text = Property.ToString();
+                }
+            }
+
+            private void TrackBar_Scroll(object? sender, EventArgs e)
+            {
+                if (!loopBreak)
+                {
+                    loopBreak = true;
+                    Property = Fvar(TrackBar.Value);
+                    TextBox.Text = Property.ToString();
+                    window.field.Invalidate();
+                    loopBreak = false;
+                }
+            }
+
+            private void TextBox_TextChanged(object? sender, EventArgs e)
+            {
+                if (!loopBreak)
+                {
+                    try
+                    {
+                        loopBreak = true;
+                        TrackBar.Value = Fval(double.Parse(TextBox.Text));
+                        Property = Fvar(TrackBar.Value);
+                        window.field.Invalidate();
+                        loopBreak = false;
+                    }
+                    catch { loopBreak = false; }
+                }
+            }
         }
     }
 }

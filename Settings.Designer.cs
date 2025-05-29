@@ -28,19 +28,28 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ListViewItem listViewItem1 = new ListViewItem(new string[] { "Red" }, -1, Color.Empty, Color.Red, null);
+            ListViewItem listViewItem2 = new ListViewItem(new string[] { "Orange" }, -1, Color.Empty, Color.Orange, null);
+            ListViewItem listViewItem3 = new ListViewItem(new string[] { "Yellow" }, -1, Color.Empty, Color.Yellow, null);
+            ListViewItem listViewItem4 = new ListViewItem(new string[] { "Green" }, -1, Color.Empty, Color.Green, null);
+            ListViewItem listViewItem5 = new ListViewItem(new string[] { "Cyan" }, -1, Color.Empty, Color.Cyan, null);
+            ListViewItem listViewItem6 = new ListViewItem(new string[] { "Blue" }, -1, Color.Empty, Color.Blue, null);
+            ListViewItem listViewItem7 = new ListViewItem(new string[] { "Purple" }, -1, Color.Empty, Color.Purple, null);
+            ListViewItem listViewItem8 = new ListViewItem(new string[] { "Violet" }, -1, Color.Empty, Color.Violet, null);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             RayCountBar = new TrackBar();
             RayCountBox = new TextBox();
             label1 = new Label();
-            RainbowPatternBox = new CheckBox();
+            AllowTotalReflectBox = new CheckBox();
             label2 = new Label();
-            LensRadiusLeftBox = new TextBox();
-            LensRadiusLeftBar = new TrackBar();
-            label3 = new Label();
             LensRadiusRightBox = new TextBox();
             LensRadiusRightBar = new TrackBar();
+            label3 = new Label();
+            LensRadiusLeftBox = new TextBox();
+            LensRadiusLeftBar = new TrackBar();
             label4 = new Label();
-            ExitDistanceBox = new TextBox();
-            ExitDistanceBar = new TrackBar();
+            ImageDistanceBox = new TextBox();
+            ImageDistanceBar = new TrackBar();
             label5 = new Label();
             AngleBox = new TextBox();
             AngleBar = new TrackBar();
@@ -58,14 +67,30 @@
             category2 = new Label();
             category3 = new Label();
             stopScroll = new Label();
+            label9 = new Label();
+            LensRefractIndexBox = new TextBox();
+            LensRefractIndexBar = new TrackBar();
+            label10 = new Label();
+            LensThicknessBox = new TextBox();
+            LensThicknessBar = new TrackBar();
+            label11 = new Label();
+            RayStepLengthBox = new TextBox();
+            RayStepLengthBar = new TrackBar();
+            LensRadiusLeftNegativeBox = new CheckBox();
+            LensRadiusRightNegativeBox = new CheckBox();
+            RayColorsPalette = new ListView();
+            label12 = new Label();
             ((System.ComponentModel.ISupportInitialize)RayCountBar).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)LensRadiusLeftBar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)LensRadiusRightBar).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)ExitDistanceBar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)LensRadiusLeftBar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ImageDistanceBar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AngleBar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ImageBlurStrengthBar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)RayStrengthBar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)LensHeightBar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)LensRefractIndexBar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)LensThicknessBar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)RayStepLengthBar).BeginInit();
             SuspendLayout();
             // 
             // RayCountBar
@@ -79,7 +104,6 @@
             RayCountBar.TabIndex = 0;
             RayCountBar.TickStyle = TickStyle.None;
             RayCountBar.Value = 50;
-            RayCountBar.Scroll += RayCountBar_Scroll;
             // 
             // RayCountBox
             // 
@@ -91,7 +115,6 @@
             RayCountBox.Size = new Size(59, 35);
             RayCountBox.TabIndex = 1;
             RayCountBox.Text = "50";
-            RayCountBox.TextChanged += RayCountBox_TextChanged;
             // 
             // label1
             // 
@@ -102,120 +125,112 @@
             label1.TabIndex = 2;
             label1.Text = "Количество";
             // 
-            // RainbowPatternBox
+            // AllowTotalReflectBox
             // 
-            RainbowPatternBox.AutoSize = true;
-            RainbowPatternBox.Location = new Point(32, 215);
-            RainbowPatternBox.Name = "RainbowPatternBox";
-            RainbowPatternBox.Size = new Size(210, 32);
-            RainbowPatternBox.TabIndex = 3;
-            RainbowPatternBox.Text = "Радужный паттерн";
-            RainbowPatternBox.UseVisualStyleBackColor = true;
-            RainbowPatternBox.CheckedChanged += RainbowPatternBox_CheckedChanged;
+            AllowTotalReflectBox.AutoSize = true;
+            AllowTotalReflectBox.Location = new Point(319, 253);
+            AllowTotalReflectBox.Name = "AllowTotalReflectBox";
+            AllowTotalReflectBox.Size = new Size(240, 32);
+            AllowTotalReflectBox.TabIndex = 3;
+            AllowTotalReflectBox.Text = "Разрешить отражение";
+            AllowTotalReflectBox.UseVisualStyleBackColor = true;
+            AllowTotalReflectBox.CheckedChanged += AllowTotalReflectBox_CheckedChanged;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(16, 343);
+            label2.Location = new Point(318, 387);
             label2.Name = "label2";
-            label2.Size = new Size(149, 28);
+            label2.Size = new Size(162, 28);
             label2.TabIndex = 6;
-            label2.Text = "Левый радиус";
-            // 
-            // LensRadiusLeftBox
-            // 
-            LensRadiusLeftBox.Font = new Font("Comic Sans MS", 12F);
-            LensRadiusLeftBox.Location = new Point(220, 375);
-            LensRadiusLeftBox.Margin = new Padding(4);
-            LensRadiusLeftBox.MaxLength = 3;
-            LensRadiusLeftBox.Name = "LensRadiusLeftBox";
-            LensRadiusLeftBox.Size = new Size(59, 35);
-            LensRadiusLeftBox.TabIndex = 5;
-            LensRadiusLeftBox.Text = "20";
-            LensRadiusLeftBox.TextChanged += LensRadiusLeftbox_TextChanged;
-            // 
-            // LensRadiusLeftBar
-            // 
-            LensRadiusLeftBar.AutoSize = false;
-            LensRadiusLeftBar.Location = new Point(17, 375);
-            LensRadiusLeftBar.Margin = new Padding(4);
-            LensRadiusLeftBar.Maximum = 60;
-            LensRadiusLeftBar.Minimum = -60;
-            LensRadiusLeftBar.Name = "LensRadiusLeftBar";
-            LensRadiusLeftBar.Size = new Size(195, 35);
-            LensRadiusLeftBar.TabIndex = 4;
-            LensRadiusLeftBar.TickStyle = TickStyle.None;
-            LensRadiusLeftBar.Value = 20;
-            LensRadiusLeftBar.Scroll += LensRadiusLeftBar_Scroll;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(317, 343);
-            label3.Name = "label3";
-            label3.Size = new Size(162, 28);
-            label3.TabIndex = 9;
-            label3.Text = "Правый радиус";
+            label2.Text = "Правый радиус";
             // 
             // LensRadiusRightBox
             // 
             LensRadiusRightBox.Font = new Font("Comic Sans MS", 12F);
-            LensRadiusRightBox.Location = new Point(521, 375);
+            LensRadiusRightBox.Location = new Point(522, 419);
             LensRadiusRightBox.Margin = new Padding(4);
-            LensRadiusRightBox.MaxLength = 3;
+            LensRadiusRightBox.MaxLength = 5;
             LensRadiusRightBox.Name = "LensRadiusRightBox";
             LensRadiusRightBox.Size = new Size(59, 35);
-            LensRadiusRightBox.TabIndex = 8;
+            LensRadiusRightBox.TabIndex = 5;
             LensRadiusRightBox.Text = "20";
-            LensRadiusRightBox.TextChanged += LensRadiusRightBox_TextChanged;
             // 
             // LensRadiusRightBar
             // 
             LensRadiusRightBar.AutoSize = false;
-            LensRadiusRightBar.Location = new Point(318, 375);
+            LensRadiusRightBar.Location = new Point(319, 419);
             LensRadiusRightBar.Margin = new Padding(4);
-            LensRadiusRightBar.Maximum = 60;
-            LensRadiusRightBar.Minimum = -60;
+            LensRadiusRightBar.Maximum = 1000;
             LensRadiusRightBar.Name = "LensRadiusRightBar";
             LensRadiusRightBar.Size = new Size(195, 35);
-            LensRadiusRightBar.TabIndex = 7;
+            LensRadiusRightBar.TabIndex = 4;
             LensRadiusRightBar.TickStyle = TickStyle.None;
             LensRadiusRightBar.Value = 20;
-            LensRadiusRightBar.Scroll += LensRadiusRightBar_Scroll;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(17, 387);
+            label3.Name = "label3";
+            label3.Size = new Size(149, 28);
+            label3.TabIndex = 9;
+            label3.Text = "Левый радиус";
+            // 
+            // LensRadiusLeftBox
+            // 
+            LensRadiusLeftBox.Font = new Font("Comic Sans MS", 12F);
+            LensRadiusLeftBox.Location = new Point(221, 419);
+            LensRadiusLeftBox.Margin = new Padding(4);
+            LensRadiusLeftBox.MaxLength = 5;
+            LensRadiusLeftBox.Name = "LensRadiusLeftBox";
+            LensRadiusLeftBox.Size = new Size(59, 35);
+            LensRadiusLeftBox.TabIndex = 8;
+            LensRadiusLeftBox.Text = "20";
+            // 
+            // LensRadiusLeftBar
+            // 
+            LensRadiusLeftBar.AutoSize = false;
+            LensRadiusLeftBar.Location = new Point(18, 419);
+            LensRadiusLeftBar.Margin = new Padding(4);
+            LensRadiusLeftBar.Maximum = 1000;
+            LensRadiusLeftBar.Name = "LensRadiusLeftBar";
+            LensRadiusLeftBar.Size = new Size(195, 35);
+            LensRadiusLeftBar.TabIndex = 7;
+            LensRadiusLeftBar.TickStyle = TickStyle.None;
+            LensRadiusLeftBar.Value = 20;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(12, 582);
+            label4.Location = new Point(12, 705);
             label4.Name = "label4";
             label4.Size = new Size(279, 28);
             label4.TabIndex = 12;
             label4.Text = "Расстояние до изображения";
             // 
-            // ExitDistanceBox
+            // ImageDistanceBox
             // 
-            ExitDistanceBox.Font = new Font("Comic Sans MS", 12F);
-            ExitDistanceBox.Location = new Point(216, 614);
-            ExitDistanceBox.Margin = new Padding(4);
-            ExitDistanceBox.MaxLength = 3;
-            ExitDistanceBox.Name = "ExitDistanceBox";
-            ExitDistanceBox.Size = new Size(59, 35);
-            ExitDistanceBox.TabIndex = 11;
-            ExitDistanceBox.Text = "120";
-            ExitDistanceBox.TextChanged += ExitDistanceBox_TextChanged;
+            ImageDistanceBox.Font = new Font("Comic Sans MS", 12F);
+            ImageDistanceBox.Location = new Point(216, 737);
+            ImageDistanceBox.Margin = new Padding(4);
+            ImageDistanceBox.MaxLength = 3;
+            ImageDistanceBox.Name = "ImageDistanceBox";
+            ImageDistanceBox.Size = new Size(59, 35);
+            ImageDistanceBox.TabIndex = 11;
+            ImageDistanceBox.Text = "120";
             // 
-            // ExitDistanceBar
+            // ImageDistanceBar
             // 
-            ExitDistanceBar.AutoSize = false;
-            ExitDistanceBar.Location = new Point(13, 614);
-            ExitDistanceBar.Margin = new Padding(4);
-            ExitDistanceBar.Maximum = 460;
-            ExitDistanceBar.Name = "ExitDistanceBar";
-            ExitDistanceBar.Size = new Size(195, 35);
-            ExitDistanceBar.TabIndex = 10;
-            ExitDistanceBar.TickStyle = TickStyle.None;
-            ExitDistanceBar.Value = 120;
-            ExitDistanceBar.Scroll += ExitDistanceBar_Scroll;
+            ImageDistanceBar.AutoSize = false;
+            ImageDistanceBar.Location = new Point(13, 737);
+            ImageDistanceBar.Margin = new Padding(4);
+            ImageDistanceBar.Maximum = 460;
+            ImageDistanceBar.Name = "ImageDistanceBar";
+            ImageDistanceBar.Size = new Size(195, 35);
+            ImageDistanceBar.TabIndex = 10;
+            ImageDistanceBar.TickStyle = TickStyle.None;
+            ImageDistanceBar.Value = 120;
             // 
             // label5
             // 
@@ -236,7 +251,6 @@
             AngleBox.Size = new Size(59, 35);
             AngleBox.TabIndex = 14;
             AngleBox.Text = "0";
-            AngleBox.TextChanged += AngleBox_TextChanged;
             // 
             // AngleBar
             // 
@@ -249,12 +263,11 @@
             AngleBar.Size = new Size(195, 35);
             AngleBar.TabIndex = 13;
             AngleBar.TickStyle = TickStyle.None;
-            AngleBar.Scroll += AngleBar_Scroll;
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(317, 582);
+            label6.Location = new Point(317, 705);
             label6.Name = "label6";
             label6.Size = new Size(236, 28);
             label6.TabIndex = 18;
@@ -263,19 +276,18 @@
             // ImageBlurStrengthBox
             // 
             ImageBlurStrengthBox.Font = new Font("Comic Sans MS", 12F);
-            ImageBlurStrengthBox.Location = new Point(521, 614);
+            ImageBlurStrengthBox.Location = new Point(521, 737);
             ImageBlurStrengthBox.Margin = new Padding(4);
             ImageBlurStrengthBox.MaxLength = 2;
             ImageBlurStrengthBox.Name = "ImageBlurStrengthBox";
             ImageBlurStrengthBox.Size = new Size(59, 35);
             ImageBlurStrengthBox.TabIndex = 17;
             ImageBlurStrengthBox.Text = "20";
-            ImageBlurStrengthBox.TextChanged += ImageBlurStrengthBox_TextChanged;
             // 
             // ImageBlurStrengthBar
             // 
             ImageBlurStrengthBar.AutoSize = false;
-            ImageBlurStrengthBar.Location = new Point(318, 614);
+            ImageBlurStrengthBar.Location = new Point(318, 737);
             ImageBlurStrengthBar.Margin = new Padding(4);
             ImageBlurStrengthBar.Maximum = 20;
             ImageBlurStrengthBar.Minimum = 1;
@@ -284,7 +296,6 @@
             ImageBlurStrengthBar.TabIndex = 16;
             ImageBlurStrengthBar.TickStyle = TickStyle.None;
             ImageBlurStrengthBar.Value = 2;
-            ImageBlurStrengthBar.Scroll += ImageBlurStrengthBar_Scroll;
             // 
             // label7
             // 
@@ -305,7 +316,6 @@
             RayStrengthBox.Size = new Size(59, 35);
             RayStrengthBox.TabIndex = 20;
             RayStrengthBox.Text = "100";
-            RayStrengthBox.TextChanged += RayStrengthBox_TextChanged;
             // 
             // RayStrengthBar
             // 
@@ -319,12 +329,11 @@
             RayStrengthBar.TabIndex = 19;
             RayStrengthBar.TickStyle = TickStyle.None;
             RayStrengthBar.Value = 100;
-            RayStrengthBar.Scroll += RayStrengthBar_Scroll;
             // 
             // DrawAfterExitBox
             // 
             DrawAfterExitBox.AutoSize = true;
-            DrawAfterExitBox.Location = new Point(295, 215);
+            DrawAfterExitBox.Location = new Point(291, 215);
             DrawAfterExitBox.Name = "DrawAfterExitBox";
             DrawAfterExitBox.Size = new Size(290, 32);
             DrawAfterExitBox.TabIndex = 22;
@@ -335,7 +344,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(16, 414);
+            label8.Location = new Point(18, 458);
             label8.Name = "label8";
             label8.Size = new Size(82, 28);
             label8.TabIndex = 25;
@@ -344,19 +353,18 @@
             // LensHeightBox
             // 
             LensHeightBox.Font = new Font("Comic Sans MS", 12F);
-            LensHeightBox.Location = new Point(220, 446);
+            LensHeightBox.Location = new Point(222, 490);
             LensHeightBox.Margin = new Padding(4);
             LensHeightBox.MaxLength = 3;
             LensHeightBox.Name = "LensHeightBox";
             LensHeightBox.Size = new Size(59, 35);
             LensHeightBox.TabIndex = 24;
             LensHeightBox.Text = "300";
-            LensHeightBox.TextChanged += LensHeightBox_TextChanged;
             // 
             // LensHeightBar
             // 
             LensHeightBar.AutoSize = false;
-            LensHeightBar.Location = new Point(17, 446);
+            LensHeightBar.Location = new Point(19, 490);
             LensHeightBar.Margin = new Padding(4);
             LensHeightBar.Maximum = 515;
             LensHeightBar.Name = "LensHeightBar";
@@ -364,7 +372,6 @@
             LensHeightBar.TabIndex = 23;
             LensHeightBar.TickStyle = TickStyle.None;
             LensHeightBar.Value = 300;
-            LensHeightBar.Scroll += LensHeightBar_Scroll;
             // 
             // category1
             // 
@@ -380,7 +387,7 @@
             // 
             category2.AutoSize = true;
             category2.Font = new Font("Comic Sans MS", 16F, FontStyle.Bold);
-            category2.Location = new Point(251, 275);
+            category2.Location = new Point(251, 316);
             category2.Name = "category2";
             category2.Size = new Size(96, 38);
             category2.TabIndex = 27;
@@ -390,7 +397,7 @@
             // 
             category3.AutoSize = true;
             category3.Font = new Font("Comic Sans MS", 16F, FontStyle.Bold);
-            category3.Location = new Point(200, 513);
+            category3.Location = new Point(200, 636);
             category3.Name = "category3";
             category3.Size = new Size(188, 38);
             category3.TabIndex = 28;
@@ -398,11 +405,160 @@
             // 
             // stopScroll
             // 
+            stopScroll.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             stopScroll.AutoSize = true;
-            stopScroll.Location = new Point(270, 679);
+            stopScroll.Location = new Point(278, 804);
             stopScroll.Name = "stopScroll";
-            stopScroll.Size = new Size(0, 28);
+            stopScroll.Size = new Size(42, 28);
             stopScroll.TabIndex = 29;
+            stopScroll.Text = "« »";
+            stopScroll.TextAlign = ContentAlignment.TopCenter;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(317, 458);
+            label9.Name = "label9";
+            label9.Size = new Size(263, 28);
+            label9.TabIndex = 32;
+            label9.Text = "Показатель преломления";
+            // 
+            // LensRefractIndexBox
+            // 
+            LensRefractIndexBox.Font = new Font("Comic Sans MS", 12F);
+            LensRefractIndexBox.Location = new Point(521, 490);
+            LensRefractIndexBox.Margin = new Padding(4);
+            LensRefractIndexBox.MaxLength = 4;
+            LensRefractIndexBox.Name = "LensRefractIndexBox";
+            LensRefractIndexBox.Size = new Size(59, 35);
+            LensRefractIndexBox.TabIndex = 31;
+            LensRefractIndexBox.Text = "1.5";
+            // 
+            // LensRefractIndexBar
+            // 
+            LensRefractIndexBar.AutoSize = false;
+            LensRefractIndexBar.Location = new Point(318, 490);
+            LensRefractIndexBar.Margin = new Padding(4);
+            LensRefractIndexBar.Maximum = 500;
+            LensRefractIndexBar.Minimum = 100;
+            LensRefractIndexBar.Name = "LensRefractIndexBar";
+            LensRefractIndexBar.Size = new Size(195, 35);
+            LensRefractIndexBar.TabIndex = 30;
+            LensRefractIndexBar.TickStyle = TickStyle.None;
+            LensRefractIndexBar.Value = 150;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(16, 526);
+            label10.Name = "label10";
+            label10.Size = new Size(101, 28);
+            label10.TabIndex = 35;
+            label10.Text = "Толщина";
+            // 
+            // LensThicknessBox
+            // 
+            LensThicknessBox.Font = new Font("Comic Sans MS", 12F);
+            LensThicknessBox.Location = new Point(220, 558);
+            LensThicknessBox.Margin = new Padding(4);
+            LensThicknessBox.MaxLength = 3;
+            LensThicknessBox.Name = "LensThicknessBox";
+            LensThicknessBox.Size = new Size(59, 35);
+            LensThicknessBox.TabIndex = 34;
+            LensThicknessBox.Text = "20";
+            // 
+            // LensThicknessBar
+            // 
+            LensThicknessBar.AutoSize = false;
+            LensThicknessBar.Location = new Point(17, 558);
+            LensThicknessBar.Margin = new Padding(4);
+            LensThicknessBar.Maximum = 300;
+            LensThicknessBar.Minimum = 1;
+            LensThicknessBar.Name = "LensThicknessBar";
+            LensThicknessBar.Size = new Size(195, 35);
+            LensThicknessBar.TabIndex = 33;
+            LensThicknessBar.TickStyle = TickStyle.None;
+            LensThicknessBar.Value = 20;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(317, 130);
+            label11.Name = "label11";
+            label11.Size = new Size(124, 28);
+            label11.TabIndex = 38;
+            label11.Text = "Длина шага";
+            // 
+            // RayStepLengthBox
+            // 
+            RayStepLengthBox.Font = new Font("Comic Sans MS", 12F);
+            RayStepLengthBox.Location = new Point(521, 162);
+            RayStepLengthBox.Margin = new Padding(4);
+            RayStepLengthBox.MaxLength = 4;
+            RayStepLengthBox.Name = "RayStepLengthBox";
+            RayStepLengthBox.Size = new Size(59, 35);
+            RayStepLengthBox.TabIndex = 37;
+            RayStepLengthBox.Text = "0";
+            // 
+            // RayStepLengthBar
+            // 
+            RayStepLengthBar.AutoSize = false;
+            RayStepLengthBar.Location = new Point(318, 162);
+            RayStepLengthBar.Margin = new Padding(4);
+            RayStepLengthBar.Maximum = 65;
+            RayStepLengthBar.Minimum = -65;
+            RayStepLengthBar.Name = "RayStepLengthBar";
+            RayStepLengthBar.Size = new Size(195, 35);
+            RayStepLengthBar.TabIndex = 36;
+            RayStepLengthBar.TickStyle = TickStyle.None;
+            // 
+            // LensRadiusLeftNegativeBox
+            // 
+            LensRadiusLeftNegativeBox.AutoSize = true;
+            LensRadiusLeftNegativeBox.Font = new Font("Comic Sans MS", 9F);
+            LensRadiusLeftNegativeBox.Location = new Point(172, 392);
+            LensRadiusLeftNegativeBox.Name = "LensRadiusLeftNegativeBox";
+            LensRadiusLeftNegativeBox.Size = new Size(91, 24);
+            LensRadiusLeftNegativeBox.TabIndex = 39;
+            LensRadiusLeftNegativeBox.Text = "Негатив";
+            LensRadiusLeftNegativeBox.UseVisualStyleBackColor = true;
+            LensRadiusLeftNegativeBox.CheckedChanged += LensRadiusLeftNegativeBox_CheckedChanged;
+            // 
+            // LensRadiusRightNegativeBox
+            // 
+            LensRadiusRightNegativeBox.AutoSize = true;
+            LensRadiusRightNegativeBox.Font = new Font("Comic Sans MS", 9F);
+            LensRadiusRightNegativeBox.Location = new Point(486, 392);
+            LensRadiusRightNegativeBox.Name = "LensRadiusRightNegativeBox";
+            LensRadiusRightNegativeBox.Size = new Size(91, 24);
+            LensRadiusRightNegativeBox.TabIndex = 40;
+            LensRadiusRightNegativeBox.Text = "Негатив";
+            LensRadiusRightNegativeBox.UseVisualStyleBackColor = true;
+            LensRadiusRightNegativeBox.CheckedChanged += LensRadiusRightNegativeBox_CheckedChanged;
+            // 
+            // RayColorsPalette
+            // 
+            RayColorsPalette.Alignment = ListViewAlignment.Left;
+            RayColorsPalette.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3, listViewItem4, listViewItem5, listViewItem6, listViewItem7, listViewItem8 });
+            RayColorsPalette.Location = new Point(16, 232);
+            RayColorsPalette.MultiSelect = false;
+            RayColorsPalette.Name = "RayColorsPalette";
+            RayColorsPalette.OwnerDraw = true;
+            RayColorsPalette.Size = new Size(262, 53);
+            RayColorsPalette.TabIndex = 41;
+            RayColorsPalette.UseCompatibleStateImageBehavior = false;
+            RayColorsPalette.View = View.Tile;
+            RayColorsPalette.DrawItem += RayColorsPalette_DrawItem;
+            RayColorsPalette.Click += RayColorsPalette_Click;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(19, 201);
+            label12.Name = "label12";
+            label12.Size = new Size(67, 28);
+            label12.TabIndex = 42;
+            label12.Text = "Цвета";
             // 
             // Settings
             // 
@@ -410,6 +566,19 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             ClientSize = new Size(614, 594);
+            Controls.Add(label12);
+            Controls.Add(RayColorsPalette);
+            Controls.Add(LensRadiusRightNegativeBox);
+            Controls.Add(LensRadiusLeftNegativeBox);
+            Controls.Add(label11);
+            Controls.Add(RayStepLengthBox);
+            Controls.Add(RayStepLengthBar);
+            Controls.Add(label10);
+            Controls.Add(LensThicknessBox);
+            Controls.Add(LensThicknessBar);
+            Controls.Add(label9);
+            Controls.Add(LensRefractIndexBox);
+            Controls.Add(LensRefractIndexBar);
             Controls.Add(stopScroll);
             Controls.Add(category3);
             Controls.Add(category2);
@@ -428,33 +597,39 @@
             Controls.Add(AngleBox);
             Controls.Add(AngleBar);
             Controls.Add(label4);
-            Controls.Add(ExitDistanceBox);
-            Controls.Add(ExitDistanceBar);
+            Controls.Add(ImageDistanceBox);
+            Controls.Add(ImageDistanceBar);
             Controls.Add(label3);
-            Controls.Add(LensRadiusRightBox);
-            Controls.Add(LensRadiusRightBar);
-            Controls.Add(label2);
             Controls.Add(LensRadiusLeftBox);
             Controls.Add(LensRadiusLeftBar);
-            Controls.Add(RainbowPatternBox);
+            Controls.Add(label2);
+            Controls.Add(LensRadiusRightBox);
+            Controls.Add(LensRadiusRightBar);
+            Controls.Add(AllowTotalReflectBox);
             Controls.Add(label1);
             Controls.Add(RayCountBox);
             Controls.Add(RayCountBar);
             Font = new Font("Comic Sans MS", 12F);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
             MaximizeBox = false;
+            MinimizeBox = false;
             Name = "Settings";
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Настройки модели";
             ((System.ComponentModel.ISupportInitialize)RayCountBar).EndInit();
-            ((System.ComponentModel.ISupportInitialize)LensRadiusLeftBar).EndInit();
             ((System.ComponentModel.ISupportInitialize)LensRadiusRightBar).EndInit();
-            ((System.ComponentModel.ISupportInitialize)ExitDistanceBar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)LensRadiusLeftBar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ImageDistanceBar).EndInit();
             ((System.ComponentModel.ISupportInitialize)AngleBar).EndInit();
             ((System.ComponentModel.ISupportInitialize)ImageBlurStrengthBar).EndInit();
             ((System.ComponentModel.ISupportInitialize)RayStrengthBar).EndInit();
             ((System.ComponentModel.ISupportInitialize)LensHeightBar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)LensRefractIndexBar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)LensThicknessBar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)RayStepLengthBar).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -464,16 +639,16 @@
         private TrackBar RayCountBar;
         private TextBox RayCountBox;
         private Label label1;
-        private CheckBox RainbowPatternBox;
+        private CheckBox AllowTotalReflectBox;
         private Label label2;
-        private TextBox LensRadiusLeftBox;
-        private TrackBar LensRadiusLeftBar;
-        private Label label3;
         private TextBox LensRadiusRightBox;
         private TrackBar LensRadiusRightBar;
+        private Label label3;
+        private TextBox LensRadiusLeftBox;
+        private TrackBar LensRadiusLeftBar;
         private Label label4;
-        private TextBox ExitDistanceBox;
-        private TrackBar ExitDistanceBar;
+        private TextBox ImageDistanceBox;
+        private TrackBar ImageDistanceBar;
         private Label label5;
         private TextBox AngleBox;
         private TrackBar AngleBar;
@@ -491,5 +666,18 @@
         private Label category2;
         private Label category3;
         private Label stopScroll;
+        private Label label9;
+        private TextBox LensRefractIndexBox;
+        private TrackBar LensRefractIndexBar;
+        private Label label10;
+        private TextBox LensThicknessBox;
+        private TrackBar LensThicknessBar;
+        private Label label11;
+        private TextBox RayStepLengthBox;
+        private TrackBar RayStepLengthBar;
+        private CheckBox LensRadiusLeftNegativeBox;
+        private CheckBox LensRadiusRightNegativeBox;
+        private ListView RayColorsPalette;
+        private Label label12;
     }
 }
